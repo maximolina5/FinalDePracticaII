@@ -25,7 +25,6 @@ public class CtrlProducto implements ActionListener {
         this.modC = modC;
         this.frm = frm;
         this.frm.btnGuardar.addActionListener(this);
-        this.frm.btnCrear.addActionListener(this);
         this.frm.btnModificar.addActionListener(this);
         this.frm.btnBorrar.addActionListener(this);
         this.frm.btnEliminar.addActionListener(this);
