@@ -144,5 +144,34 @@ public class ConsultasUsuario extends Conexion {
     
    }
     
-    
+    public boolean verificarUsuario(Usuario usu){
+        
+        Conexion con = new Conexion();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try{
+            Connection conexion = con.getConexion();
+            
+            ps = conexion.prepareStatement("SELECT id_usuario, nombre, apellido, dni, tipo_usuario, nombre_usuario, contrasenia FROM usuario WHERE nombre_usuario=?");
+            ps.setString(1, usu.getNombre_usuario());
+            
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                if(usu.getContrasenia().equals(rs.getString("contrasenia"))){
+                    usu.setId(rs.getInt("id_usuario"));
+                    usu.setNombre(rs.getString("nombre"));
+                    usu.setTipo_usuario(rs.getString("tipo_usuario"));
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            return false;
+        }catch(Exception e){
+            return false;
+        }
+        
+    }
 }

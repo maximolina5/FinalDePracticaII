@@ -5,6 +5,10 @@
  */
 package vistas;
 
+import javax.swing.JOptionPane;
+import modelo.ConsultasUsuario;
+import modelo.Usuario;
+
 /**
  *
  * @author maxim
@@ -33,11 +37,11 @@ public class iniciarSesion extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNombreUsuario = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtContrasenia = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -57,14 +61,19 @@ public class iniciarSesion extends javax.swing.JFrame {
         jLabel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 0, 1, new java.awt.Color(51, 51, 51)));
         jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, -1));
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(51, 51, 51)));
-        jPanel3.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 250, 40));
+        txtNombreUsuario.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombreUsuario.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
+        txtNombreUsuario.setForeground(new java.awt.Color(51, 51, 51));
+        txtNombreUsuario.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(51, 51, 51)));
+        jPanel3.add(txtNombreUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, 250, 40));
 
         btnIngresar.setBackground(new java.awt.Color(255, 255, 255));
         btnIngresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Group5.png"))); // NOI18N
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
         jPanel3.add(btnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 270, -1));
 
         jLabel4.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
@@ -77,11 +86,11 @@ public class iniciarSesion extends javax.swing.JFrame {
         jLabel5.setText("Nombre de usuario");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
 
-        jPasswordField1.setBackground(new java.awt.Color(255, 255, 255));
-        jPasswordField1.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
-        jPasswordField1.setForeground(new java.awt.Color(51, 51, 51));
-        jPasswordField1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(51, 51, 51)));
-        jPanel3.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 269, 250, 40));
+        txtContrasenia.setBackground(new java.awt.Color(255, 255, 255));
+        txtContrasenia.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
+        txtContrasenia.setForeground(new java.awt.Color(51, 51, 51));
+        txtContrasenia.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(51, 51, 51)));
+        jPanel3.add(txtContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 269, 250, 40));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 450, 450));
 
@@ -92,6 +101,27 @@ public class iniciarSesion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        Usuario usuario = new Usuario();
+        ConsultasUsuario consultaUsuario = new ConsultasUsuario();
+        
+        String contrasenia = new String(txtContrasenia.getPassword());
+        
+        if(txtNombreUsuario.getText().equals("") || contrasenia.equals("")){
+            JOptionPane.showMessageDialog(null, "Complete todos los campos");
+        }else{
+            usuario.setNombre_usuario(txtNombreUsuario.getText());
+            usuario.setContrasenia(txtContrasenia.getText());
+            
+            if(consultaUsuario.verificarUsuario(usuario)){
+                JOptionPane.showMessageDialog(null, "Inicio de sesion correcto");
+            }else{
+                JOptionPane.showMessageDialog(null, "Datos incorrectos");
+
+            }
+        }
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,7 +167,7 @@ public class iniciarSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField txtContrasenia;
+    private javax.swing.JTextField txtNombreUsuario;
     // End of variables declaration//GEN-END:variables
 }
