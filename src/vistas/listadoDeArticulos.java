@@ -5,6 +5,14 @@
  */
 package vistas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import modelo.Conexion;
+
 /**
  *
  * @author maxim
@@ -14,12 +22,46 @@ public class listadoDeArticulos extends javax.swing.JFrame {
     /**
      * Creates new form listadoDeArticulos
      */
+    String where = "";
     public listadoDeArticulos() {
         initComponents();
         trasparenciaButton();
-    }
-    
-    
+         try {
+            DefaultTableModel modeloTabla = new DefaultTableModel();
+            jtArticulos.setModel(modeloTabla);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+
+            String sql = "SELECT nombre, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modeloTabla.addColumn("Nombre");
+            modeloTabla.addColumn("Cantidad");
+            modeloTabla.addColumn("Descripcion");
+            modeloTabla.addColumn("Vencimiento");
+            modeloTabla.addColumn("Precio");
+            modeloTabla.addColumn("Ingreso");
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+
+                }
+                modeloTabla.addRow(filas);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+    }                       
+
     public void trasparenciaButton(){
         btn1.setOpaque(false);
         btn1.setContentAreaFilled(false);
@@ -38,7 +80,7 @@ public class listadoDeArticulos extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btn1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtArticulos = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -55,7 +97,6 @@ public class listadoDeArticulos extends javax.swing.JFrame {
 
         btn1.setBackground(new java.awt.Color(255, 255, 255));
         btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Group10.png"))); // NOI18N
-        btn1.setActionCommand("");
         btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn1ActionPerformed(evt);
@@ -63,20 +104,39 @@ public class listadoDeArticulos extends javax.swing.JFrame {
         });
         jPanel1.add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, -1, -1));
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtArticulos.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jtArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Cantidad", "Descripción", "Vencimiento", "Precio", "Ingreso"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtArticulosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtArticulos);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 120, -1, 350));
 
@@ -126,6 +186,10 @@ public class listadoDeArticulos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn1ActionPerformed
 
+    private void jtArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtArticulosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtArticulosMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -173,6 +237,6 @@ public class listadoDeArticulos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable jtArticulos;
     // End of variables declaration//GEN-END:variables
 }

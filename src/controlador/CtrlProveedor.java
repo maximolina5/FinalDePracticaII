@@ -1,4 +1,3 @@
-
 package controlador;
 
 import java.awt.event.ActionEvent;
@@ -11,19 +10,18 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
-import modelo.ConsultasUsuario;
-import modelo.Usuario;
-import vistas.altaUsuario;
+import modelo.ConsultasProveedor;
+import modelo.Proveedor;
+import vistas.altaProveedores;
 
+public class CtrlProveedor implements ActionListener {
 
-public class CtrlUsuario implements ActionListener{
-    
-    private Usuario mod;
-    private ConsultasUsuario modC;
-    private altaUsuario alt;
+    private Proveedor mod;
+    private ConsultasProveedor modC;
+    private altaProveedores alt;
 
-    public CtrlUsuario(Usuario mod, ConsultasUsuario modC, altaUsuario alt){
-        
+    public CtrlProveedor(Proveedor mod, ConsultasProveedor modC, altaProveedores alt) {
+
         this.mod = mod;
         this.modC = modC;
         this.alt = alt;
@@ -31,100 +29,106 @@ public class CtrlUsuario implements ActionListener{
         this.alt.btnEliminar.addActionListener(this);
         this.alt.btnBorrar.addActionListener(this);
         this.alt.btnModificar.addActionListener(this);
-  //      this.alt.btnBuscar.addActionListener(this);
-     
+        this.alt.btnBuscar.addActionListener(this);
+
     }
-    
-    public void iniciar(){
-        
-        alt.setTitle("Usuarios");
+
+    public void iniciar() {
+
+        alt.setTitle("Proveedores");
         alt.setLocationRelativeTo(null);
-      //  alt.txtId.setVisible(false);
-        
+        alt.txtId.setVisible(false);
+
     }
-    
+
     @Override
-    public void actionPerformed(ActionEvent e){
-        
-        if(e.getSource() == alt.btnGuardar){
-            
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == alt.btnGuardar) {
+
             mod.setNombre(alt.txtNombre.getText());
-            mod.setApellido(alt.txtApellido.getText());
-            mod.setDni(Integer.parseInt(alt.txtDni.getText()));
-            mod.setTipo_usuario(alt.txtTipoUsuario.getSelectedItem().toString());
-            mod.setNombre_usuario(alt.txtNombreUsuario.getText());
-            mod.setContrasenia(alt.txtContrasenia.getText());
-            
-            if(modC.registrar(mod)){                
+            mod.setCompania(alt.txtCompania.getText());
+            mod.setTelefono(alt.txtTelefono.getText());
+
+            if (modC.registrar(mod)) {
                 JOptionPane.showInternalMessageDialog(null, "Registro guardado");
                 limpiar();
             } else {
                 JOptionPane.showInternalMessageDialog(null, "Error al guardar");
                 limpiar();
             }
-            
+
         }
-        
-        if(e.getSource() == alt.btnModificar){
-      //      mod.setId(Integer.parseInt(alt.txtId.getText()));
+        if (e.getSource() == alt.btnModificar) {
+
+            mod.setId(Integer.parseInt(alt.txtId.getText()));
             mod.setNombre(alt.txtNombre.getText());
-            mod.setApellido(alt.txtApellido.getText());
-            mod.setDni(Integer.parseInt(alt.txtDni.getText()));
-            mod.setTipo_usuario(alt.txtTipoUsuario.toString());
-            mod.setNombre_usuario(alt.txtNombreUsuario.getText());
-            mod.setContrasenia(alt.txtContrasenia.getText());
-            
-            if(modC.modificar(mod)){                
+            mod.setCompania(alt.txtCompania.getText());
+            mod.setTelefono(alt.txtTelefono.getText());
+
+            if (modC.modificar(mod)) {
                 JOptionPane.showInternalMessageDialog(null, "Registro modificado");
                 limpiar();
             } else {
                 JOptionPane.showInternalMessageDialog(null, "Error al modificar");
                 limpiar();
             }
-            
+
         }
-        
-        if(e.getSource() == alt.btnEliminar){
-            
-//            mod.setId(Integer.parseInt(alt.txtId.getText()));          
-            if(modC.eliminar(mod)){                
+        if (e.getSource() == alt.btnEliminar) {
+
+            mod.setId(Integer.parseInt(alt.txtId.getText()));
+
+            if (modC.eliminar(mod)) {
                 JOptionPane.showInternalMessageDialog(null, "Registro eliminado");
                 limpiar();
             } else {
                 JOptionPane.showInternalMessageDialog(null, "Error al eliminar");
                 limpiar();
             }
-            
+
         }
-        
-        if(e.getSource() == alt.btnBorrar){
-            
+        if (e.getSource() == alt.btnBuscar) {
+
+            mod.setNombre(alt.txtNombre.getText());
+
+            if (modC.buscar(mod)) {
+                alt.txtId.setText(String.valueOf(mod.getId()));
+                alt.txtNombre.setText(mod.getNombre());
+                alt.txtCompania.setText(mod.getCompania());
+                alt.txtTelefono.setText(mod.getTelefono());
+
+            } else {
+                JOptionPane.showInternalMessageDialog(null, "No se encontro registro");
+                limpiar();
+            }
+
+        }
+
+        if (e.getSource() == alt.btnBorrar) {
+
             limpiar();
-            
+
         }
-        
+
     }
-    
-    
-    public void limpiar(){
-        
-       // alt.txtId.setText(null);
+
+    public void limpiar() {
+
+        alt.txtId.setText(null);
         alt.txtNombre.setText(null);
-        alt.txtApellido.setText(null);
-        alt.txtDni.setText(null);
-      //  alt.txtTipoUsuario.setText(null);
-        alt.txtNombreUsuario.setText(null);
-        alt.txtContrasenia.setText(null);
-        
+        alt.txtCompania.setText(null);
+        alt.txtTelefono.setText(null);
+
         try {
             DefaultTableModel modeloTabla = new DefaultTableModel();
-          //  alt.jtUsuarios.setModel(modeloTabla);
+            alt.jtProveedores.setModel(modeloTabla);
             PreparedStatement ps = null;
             ResultSet rs = null;
             Conexion conn = new Conexion();
             Connection con = conn.getConexion();
 
-            String sql = "SELECT nombre, apellido, dni, tipo_usuario, nombre_usuario, contrasenia FROM usuario";
+            String sql = "SELECT nombre, compania, telefono FROM proveedor";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -132,12 +136,8 @@ public class CtrlUsuario implements ActionListener{
             int cantidadColumnas = rsmd.getColumnCount();
 
             modeloTabla.addColumn("nombre");
-            modeloTabla.addColumn("apellido");
-            modeloTabla.addColumn("dni");
-            modeloTabla.addColumn("tipo_usuario");
-            modeloTabla.addColumn("nombre_usuario");
-            modeloTabla.addColumn("contrasenia");
-            
+            modeloTabla.addColumn("compania");
+            modeloTabla.addColumn("telefono");
 
             while (rs.next()) {
                 Object[] filas = new Object[cantidadColumnas];
@@ -152,4 +152,5 @@ public class CtrlUsuario implements ActionListener{
             System.err.println(ex.toString());
         }
     }
+
 }

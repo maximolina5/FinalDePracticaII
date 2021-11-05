@@ -5,6 +5,14 @@
  */
 package vistas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import modelo.Conexion;
+
 /**
  *
  * @author maxim
@@ -16,6 +24,38 @@ public class altaProveedores extends javax.swing.JFrame {
      */
     public altaProveedores() {
         initComponents();
+        
+                try {
+            DefaultTableModel modeloTabla = new DefaultTableModel();
+            jtProveedores.setModel(modeloTabla);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+
+            String sql = "SELECT nombre, compania, telefono FROM proveedor";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modeloTabla.addColumn("nombre");
+            modeloTabla.addColumn("compania");
+            modeloTabla.addColumn("telefono");
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+
+                }
+                modeloTabla.addRow(filas);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
     }
 
     /**
@@ -28,21 +68,23 @@ public class altaProveedores extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
+        txtCompania = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtProveedores = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        btn5 = new javax.swing.JButton();
-        btn7 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
         btn2 = new javax.swing.JButton();
-        btn6 = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         btn3 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
-        btn8 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         btn1 = new javax.swing.JButton();
         btn9 = new javax.swing.JButton();
@@ -64,49 +106,75 @@ public class altaProveedores extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtId.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        txtId.setForeground(new java.awt.Color(51, 51, 51));
+        txtId.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtIdActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 120, 30));
+        jPanel1.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 20, 40, 30));
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtCompania.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        txtCompania.setForeground(new java.awt.Color(51, 51, 51));
+        txtCompania.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtCompania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtCompaniaActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 120, 30));
+        jPanel1.add(txtCompania, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 110, 120, 30));
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField3.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 110, 120, 30));
+        txtNombre.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        txtNombre.setForeground(new java.awt.Color(51, 51, 51));
+        txtNombre.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 120, 30));
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTable1.setForeground(new java.awt.Color(51, 51, 51));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        txtTelefono.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        txtTelefono.setForeground(new java.awt.Color(51, 51, 51));
+        txtTelefono.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 110, 120, 30));
+
+        jtProveedores.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jtProveedores.setForeground(new java.awt.Color(51, 51, 51));
+        jtProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Compañia", "Teléfono"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtProveedorMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtProveedores);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, 480, 190));
 
@@ -120,15 +188,20 @@ public class altaProveedores extends javax.swing.JFrame {
         jLabel4.setText("Nombre");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, -1, -1));
 
-        btn5.setBackground(new java.awt.Color(255, 255, 255));
-        btn5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
-        btn5.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, 70, 50));
+        btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar");
+        btnBuscar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, 80, 50));
 
-        btn7.setBackground(new java.awt.Color(255, 255, 255));
-        btn7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/modificar1.png"))); // NOI18N
-        btn7.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn7, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
+        btnBorrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        btnBorrar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, 70, 50));
+
+        btnModificar.setBackground(new java.awt.Color(255, 255, 255));
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/modificar1.png"))); // NOI18N
+        btnModificar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
 
         jLabel15.setBackground(new java.awt.Color(51, 51, 51));
         jLabel15.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
@@ -141,10 +214,10 @@ public class altaProveedores extends javax.swing.JFrame {
         btn2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         jPanel1.add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
 
-        btn6.setBackground(new java.awt.Color(255, 255, 255));
-        btn6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        btn6.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 370, 80, 50));
+        btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
+        btnEliminar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 370, 80, 50));
 
         btn3.setBackground(new java.awt.Color(255, 255, 255));
         btn3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
@@ -156,10 +229,10 @@ public class altaProveedores extends javax.swing.JFrame {
         jLabel16.setText("Modificar");
         jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, -1, -1));
 
-        btn8.setBackground(new java.awt.Color(255, 255, 255));
-        btn8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/guardar.png"))); // NOI18N
-        btn8.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn8, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 60, 50));
+        btnGuardar.setBackground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/guardar.png"))); // NOI18N
+        btnGuardar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 60, 50));
 
         jLabel17.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(51, 51, 51));
@@ -239,13 +312,45 @@ public class altaProveedores extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtNombreActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtCompaniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCompaniaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtCompaniaActionPerformed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
+
+    private void jtProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtProveedorMouseClicked
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConexion();
+
+            int fila = jtProveedores.getSelectedRow();
+            String nom = jtProveedores.getValueAt(fila, 0).toString();
+
+            ps = conn.prepareStatement("SELECT id_proveedor, nombre, compania, telefono FROM proveedor WHERE nombre=?");
+            ps.setString(1, nom);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                txtId.setText(rs.getString("id_proveedor"));
+                txtNombre.setText(rs.getString("nombre"));
+                txtCompania.setText(rs.getString("compania"));
+                txtTelefono.setText(rs.getString("telefono"));
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+
+        // TODO add your handling code here:                                      
+    }//GEN-LAST:event_jtProveedorMouseClicked
 
     /**
      * @param args the command line arguments
@@ -287,11 +392,12 @@ public class altaProveedores extends javax.swing.JFrame {
     private javax.swing.JButton btn2;
     private javax.swing.JButton btn3;
     private javax.swing.JButton btn4;
-    private javax.swing.JButton btn5;
-    private javax.swing.JButton btn6;
-    private javax.swing.JButton btn7;
-    private javax.swing.JButton btn8;
     private javax.swing.JButton btn9;
+    public javax.swing.JButton btnBorrar;
+    public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnEliminar;
+    public javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -310,9 +416,10 @@ public class altaProveedores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    public javax.swing.JTable jtProveedores;
+    public javax.swing.JTextField txtCompania;
+    public javax.swing.JTextField txtId;
+    public javax.swing.JTextField txtNombre;
+    public javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }
