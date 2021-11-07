@@ -2,7 +2,7 @@ package modelo;
 
 public class Producto {
     private int id;
-    private String nombre;
+    private int codigo;
     private String descripcion;
     private Double precio;
     private String fechaIngreso;   
@@ -13,17 +13,18 @@ public class Producto {
         return id;
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
     public int getCantidad() {
         return cantidad;

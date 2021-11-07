@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
-import modelo.ConsultasUsuario;
+import modelo.UsuarioDao;
 import modelo.Usuario;
 import vistas.altaUsuario;
 
@@ -19,10 +19,10 @@ import vistas.altaUsuario;
 public class CtrlUsuario implements ActionListener{
     
     private Usuario mod;
-    private ConsultasUsuario modC;
+    private UsuarioDao modC;
     private altaUsuario alt;
 
-    public CtrlUsuario(Usuario mod, ConsultasUsuario modC, altaUsuario alt){
+    public CtrlUsuario(Usuario mod, UsuarioDao modC, altaUsuario alt){
         
         this.mod = mod;
         this.modC = modC;

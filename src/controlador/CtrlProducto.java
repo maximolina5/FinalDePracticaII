@@ -10,17 +10,17 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
-import modelo.ConsultasProductos;
+import modelo.ProductoDao;
 import modelo.Producto;
 import vistas.altaProductos;
 
 public class CtrlProducto implements ActionListener {
 
     private Producto mod;
-    private ConsultasProductos modC;
+    private ProductoDao modC;
     private altaProductos frm;
 
-    public CtrlProducto(Producto mod, ConsultasProductos modC, altaProductos frm) {
+    public CtrlProducto(Producto mod, ProductoDao modC, altaProductos frm) {
         this.mod = mod;
         this.modC = modC;
         this.frm = frm;
@@ -39,7 +39,7 @@ public class CtrlProducto implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == frm.btnGuardar) {
-            mod.setNombre(frm.txtNombre.getText());
+            mod.setCodigo(Integer.parseInt(frm.txtCodigo.getText()));
             mod.setCantidad(Integer.parseInt(frm.txtCantidad.getText()));
             mod.setDescripcion(frm.txtDescripcion.getText());
             mod.setVencimiento(frm.txtVencimiento.getText());
@@ -58,7 +58,7 @@ public class CtrlProducto implements ActionListener {
 
         if (e.getSource() == frm.btnModificar) {
             mod.setId(Integer.parseInt(frm.txtId.getText()));
-            mod.setNombre(frm.txtNombre.getText());
+            mod.setCodigo(Integer.parseInt(frm.txtCodigo.getText()));
             mod.setCantidad(Integer.parseInt(frm.txtCantidad.getText()));
             mod.setDescripcion(frm.txtDescripcion.getText());
             mod.setVencimiento(frm.txtVencimiento.getText());
@@ -96,7 +96,7 @@ public class CtrlProducto implements ActionListener {
 
     public void limpiar() {
         frm.txtId.setText(null);
-        frm.txtNombre.setText(null);
+        frm.txtCodigo.setText(null);
         frm.txtDescripcion.setText(null);
         frm.txtPrecio.setText(null);
         frm.txtFechaIngreso.setText(null);
@@ -110,14 +110,14 @@ public class CtrlProducto implements ActionListener {
             Conexion conn = new Conexion();
             Connection con = conn.getConexion();
 
-            String sql = "SELECT nombre, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto";
+            String sql = "SELECT codigo, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int cantidadColumnas = rsmd.getColumnCount();
 
-            modeloTabla.addColumn("Nombre");
+            modeloTabla.addColumn("Codigo");
             modeloTabla.addColumn("Cantidad");
             modeloTabla.addColumn("Descripcion");
             modeloTabla.addColumn("Vencimiento");

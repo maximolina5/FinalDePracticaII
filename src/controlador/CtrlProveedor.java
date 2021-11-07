@@ -10,17 +10,17 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
-import modelo.ConsultasProveedor;
+import modelo.ProveedorDao;
 import modelo.Proveedor;
 import vistas.altaProveedores;
 
 public class CtrlProveedor implements ActionListener {
 
     private Proveedor mod;
-    private ConsultasProveedor modC;
+    private ProveedorDao modC;
     private altaProveedores alt;
 
-    public CtrlProveedor(Proveedor mod, ConsultasProveedor modC, altaProveedores alt) {
+    public CtrlProveedor(Proveedor mod, ProveedorDao modC, altaProveedores alt) {
 
         this.mod = mod;
         this.modC = modC;

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class ConsultasUsuario extends Conexion { 
+public class UsuarioDao extends Conexion { 
     
     public boolean registrar(Usuario usu){
         

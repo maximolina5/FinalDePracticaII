@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import modelo.Conexion;
 import java.sql.Connection;
 import java.sql.SQLException;
+import modelo.Eventos;
 
 
 /**
@@ -25,6 +26,7 @@ public class altaProductos extends javax.swing.JFrame {
      * Creates new form altaProductos
      */
     String where = "";
+    Eventos evtn = new Eventos();
 
     public altaProductos() {
 
@@ -38,14 +40,14 @@ public class altaProductos extends javax.swing.JFrame {
             Conexion conn = new Conexion();
             Connection con = conn.getConexion();
 
-            String sql = "SELECT nombre, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
+            String sql = "SELECT codigo, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int cantidadColumnas = rsmd.getColumnCount();
 
-            modeloTabla.addColumn("Nombre");
+            modeloTabla.addColumn("Codigo");
             modeloTabla.addColumn("Cantidad");
             modeloTabla.addColumn("Descripcion");
             modeloTabla.addColumn("Vencimiento");
@@ -94,7 +96,7 @@ public class altaProductos extends javax.swing.JFrame {
     private void initComponents() {
 
         btnBuscar = new javax.swing.JButton();
-        txtNombre = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         txtDescripcion = new javax.swing.JTextField();
         txtVencimiento = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
@@ -143,14 +145,19 @@ public class altaProductos extends javax.swing.JFrame {
         });
         getContentPane().add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 20, 40, 30));
 
-        txtNombre.setForeground(new java.awt.Color(51, 51, 51));
-        txtNombre.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigo.setForeground(new java.awt.Color(51, 51, 51));
+        txtCodigo.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
+                txtCodigoActionPerformed(evt);
             }
         });
-        getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, 130, 30));
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, 130, 30));
 
         txtDescripcion.setForeground(new java.awt.Color(51, 51, 51));
         txtDescripcion.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
@@ -164,6 +171,11 @@ public class altaProductos extends javax.swing.JFrame {
         txtCantidad.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         txtCantidad.setForeground(new java.awt.Color(51, 51, 51));
         txtCantidad.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 200, 130, 30));
 
         txtFechaIngreso.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
@@ -173,6 +185,11 @@ public class altaProductos extends javax.swing.JFrame {
 
         txtPrecio.setForeground(new java.awt.Color(51, 51, 51));
         txtPrecio.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 120, 130, 30));
 
         txtId.setEditable(false);
@@ -189,14 +206,16 @@ public class altaProductos extends javax.swing.JFrame {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Cantidad", "Descripcion", "Vencimiento", "Precio", "Ingreso"
+                "Codigo", "Cantidad", "Descripcion", "Vencimiento", "Precio", "Ingreso"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false
@@ -217,7 +236,7 @@ public class altaProductos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtProductos);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 260, 480, 130));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 260, 480, 120));
 
         btnBorrar.setBackground(new java.awt.Color(255, 255, 255));
         btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
@@ -296,7 +315,7 @@ public class altaProductos extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel8.setText("Nombre");
+        jLabel8.setText("Codigo");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Futura Bk BT", 1, 18)); // NOI18N
@@ -336,17 +355,17 @@ public class altaProductos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
+    }//GEN-LAST:event_txtCodigoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
-        String nom = txtNombre.getText();
+        String nom = txtCodigo.getText();
         this.where = "";
 
         if (!nom.equals("")) {
-            where = "WHERE nombre= '" + nom + "'";
+            where = "WHERE codigo= '" + nom + "'";
         }
         try {
             DefaultTableModel modeloTabla = new DefaultTableModel();
@@ -356,14 +375,14 @@ public class altaProductos extends javax.swing.JFrame {
             Conexion conn = new Conexion();
             Connection con = conn.getConexion();
 
-            String sql = "SELECT nombre, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
+            String sql = "SELECT codigo, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int cantidadColumnas = rsmd.getColumnCount();
 
-            modeloTabla.addColumn("Nombre");
+            modeloTabla.addColumn("Codigo");
             modeloTabla.addColumn("Cantidad");
             modeloTabla.addColumn("Descripcion");
             modeloTabla.addColumn("Vencimiento");
@@ -395,13 +414,13 @@ public class altaProductos extends javax.swing.JFrame {
             int fila = jtProductos.getSelectedRow();
             String nom = jtProductos.getValueAt(fila, 0).toString();
             
-            ps = conn.prepareStatement("SELECT id_producto, nombre, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto WHERE nombre=?");
+            ps = conn.prepareStatement("SELECT id_producto, codigo, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto WHERE codigo=?");
             ps.setString(1, nom);
             rs = ps.executeQuery();
             
             while(rs.next()){
                 txtId.setText(rs.getString("id_producto"));
-                txtNombre.setText(rs.getString("nombre"));
+                txtCodigo.setText(rs.getString("codigo"));
                 txtCantidad.setText(rs.getString("cantidad"));
                 txtDescripcion.setText(rs.getString("descripcion"));
                 txtVencimiento.setText(rs.getString("fecha_vencimiento"));
@@ -418,6 +437,18 @@ public class altaProductos extends javax.swing.JFrame {
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        evtn.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCodigoKeyTyped
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        evtn.numberKeyPress(evt);
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        evtn.numberDecimalKeyPress(evt, txtPrecio);
+    }//GEN-LAST:event_txtPrecioKeyTyped
 
     /**
      * @param args the command line arguments
@@ -483,10 +514,10 @@ public class altaProductos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable jtProductos;
     public javax.swing.JTextField txtCantidad;
+    public javax.swing.JTextField txtCodigo;
     public javax.swing.JTextField txtDescripcion;
     public javax.swing.JTextField txtFechaIngreso;
     public javax.swing.JTextField txtId;
-    public javax.swing.JTextField txtNombre;
     public javax.swing.JTextField txtPrecio;
     public javax.swing.JTextField txtVencimiento;
     // End of variables declaration//GEN-END:variables

@@ -6,7 +6,7 @@
 package vistas;
 
 import javax.swing.JOptionPane;
-import modelo.ConsultasUsuario;
+import modelo.UsuarioDao;
 import modelo.Usuario;
 
 /**
@@ -104,7 +104,7 @@ public class iniciarSesion extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         Usuario usuario = new Usuario();
-        ConsultasUsuario consultaUsuario = new ConsultasUsuario();
+        UsuarioDao consultaUsuario = new UsuarioDao();
         
         String contrasenia = new String(txtContrasenia.getPassword());
         

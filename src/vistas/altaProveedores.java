@@ -12,6 +12,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 import modelo.Conexion;
+import modelo.Eventos;
 
 /**
  *
@@ -19,9 +20,8 @@ import modelo.Conexion;
  */
 public class altaProveedores extends javax.swing.JFrame {
 
-    /**
-     * Creates new form altaProveedores
-     */
+    Eventos evtn = new Eventos();
+    
     public altaProveedores() {
         initComponents();
         
@@ -79,17 +79,11 @@ public class altaProveedores extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
-        jLabel15 = new javax.swing.JLabel();
-        btn2 = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        btn3 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
-        btn1 = new javax.swing.JButton();
-        btn9 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        btn4 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -134,11 +128,21 @@ public class altaProveedores extends javax.swing.JFrame {
                 txtNombreActionPerformed(evt);
             }
         });
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 120, 30));
 
         txtTelefono.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         txtTelefono.setForeground(new java.awt.Color(51, 51, 51));
         txtTelefono.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 110, 120, 30));
 
         jtProveedores.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
@@ -196,69 +200,37 @@ public class altaProveedores extends javax.swing.JFrame {
         btnBorrar.setBackground(new java.awt.Color(255, 255, 255));
         btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
         btnBorrar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, 70, 50));
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 380, 70, 50));
 
         btnModificar.setBackground(new java.awt.Color(255, 255, 255));
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/modificar1.png"))); // NOI18N
         btnModificar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
-
-        jLabel15.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel15.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel15.setText(" Crear");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, 40, -1));
-
-        btn2.setBackground(new java.awt.Color(255, 255, 255));
-        btn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/modificar1.png"))); // NOI18N
-        btn2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 380, 80, 50));
 
         btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
         btnEliminar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 370, 80, 50));
-
-        btn3.setBackground(new java.awt.Color(255, 255, 255));
-        btn3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        btn3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 370, 80, 50));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 380, 80, 50));
 
         jLabel16.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(51, 51, 51));
         jLabel16.setText("Modificar");
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 420, -1, -1));
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 430, -1, -1));
 
         btnGuardar.setBackground(new java.awt.Color(255, 255, 255));
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/guardar.png"))); // NOI18N
         btnGuardar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 60, 50));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 380, 60, 50));
 
         jLabel17.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(51, 51, 51));
         jLabel17.setText("Eliminar");
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 420, -1, 30));
-
-        btn1.setBackground(new java.awt.Color(255, 255, 255));
-        btn1.setForeground(new java.awt.Color(255, 255, 255));
-        btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/crear.png"))); // NOI18N
-        btn1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
-        jPanel1.add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 370, 80, 50));
-
-        btn9.setBackground(new java.awt.Color(255, 255, 255));
-        btn9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
-        btn9.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn9, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, 70, 50));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 430, -1, 20));
 
         jLabel18.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(51, 51, 51));
         jLabel18.setText(" Borrar");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 470, 50, -1));
-
-        btn4.setBackground(new java.awt.Color(255, 255, 255));
-        btn4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/guardar.png"))); // NOI18N
-        btn4.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 60, 50));
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 430, 50, -1));
 
         jLabel10.setFont(new java.awt.Font("Futura Bk BT", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(51, 51, 51));
@@ -268,7 +240,7 @@ public class altaProveedores extends javax.swing.JFrame {
         jLabel19.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(51, 51, 51));
         jLabel19.setText("Guardar");
-        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 470, -1, -1));
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, -1, -1));
 
         jLabel9.setText("\"");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, -1, -1));
@@ -352,6 +324,14 @@ public class altaProveedores extends javax.swing.JFrame {
         // TODO add your handling code here:                                      
     }//GEN-LAST:event_jtProveedorMouseClicked
 
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        evtn.textKeyPress(evt);
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        evtn.numberKeyPress(evt);
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -388,11 +368,6 @@ public class altaProveedores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn1;
-    private javax.swing.JButton btn2;
-    private javax.swing.JButton btn3;
-    private javax.swing.JButton btn4;
-    private javax.swing.JButton btn9;
     public javax.swing.JButton btnBorrar;
     public javax.swing.JButton btnBuscar;
     public javax.swing.JButton btnEliminar;
@@ -401,7 +376,6 @@ public class altaProveedores extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
