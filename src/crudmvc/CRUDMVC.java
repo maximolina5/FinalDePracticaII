@@ -9,6 +9,7 @@ import modelo.UsuarioDao;
 import modelo.Producto;
 import modelo.Proveedor;
 import modelo.Usuario;
+import vistas.altaPrecio;
 import vistas.altaProductos;
 import vistas.altaProveedores;
 import vistas.altaUsuario;
@@ -17,22 +18,22 @@ public class CRUDMVC {
 
     public static void main(String[] args) {
 
-        Producto mod= new Producto();
-        ProductoDao modC = new ProductoDao();
-        altaProductos frm = new altaProductos();
-        
-        CtrlProducto ctrl = new CtrlProducto(mod, modC, frm);
-        ctrl.iniciar();
-        frm.setVisible(true);
-
-
-//        Usuario mod = new Usuario();
-//        UsuarioDao modC = new UsuarioDao();
-//        altaUsuario alt = new altaUsuario();
+//        Producto mod= new Producto();
+//        ProductoDao modC = new ProductoDao();
+//        altaProductos frm = new altaProductos();
 //        
-//        CtrlUsuario ctrl = new CtrlUsuario(mod, modC, alt);
+//        CtrlProducto ctrl = new CtrlProducto(mod, modC, frm);
 //        ctrl.iniciar();
-//        alt.setVisible(true); 
+//        frm.setVisible(true);
+
+
+        Usuario mod = new Usuario();
+        UsuarioDao modC = new UsuarioDao();
+        altaUsuario alt = new altaUsuario();
+        
+        CtrlUsuario ctrl = new CtrlUsuario(mod, modC, alt);
+        ctrl.iniciar();
+        alt.setVisible(true); 
 
 
 //        Proveedor mod = new Proveedor();
@@ -42,6 +43,8 @@ public class CRUDMVC {
 //        CtrlProveedor ctrl = new CtrlProveedor(mod, modC, alt);
 //        ctrl.iniciar();
 //        alt.setVisible(true);
+
+
     }
 
 }

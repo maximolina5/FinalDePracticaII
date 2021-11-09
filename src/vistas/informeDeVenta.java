@@ -5,6 +5,14 @@
  */
 package vistas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import modelo.Conexion;
+
 /**
  *
  * @author maxim
@@ -14,15 +22,46 @@ public class informeDeVenta extends javax.swing.JFrame {
     /**
      * Creates new form informeDeVenta
      */
+        String where = "";
     public informeDeVenta() {
         initComponents();
         trasparenciaButton();
+        try {
+            DefaultTableModel modeloTabla = new DefaultTableModel();
+            jtVentas.setModel(modeloTabla);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+
+            String sql = "SELECT fecha, vendedor, total FROM venta " + where;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modeloTabla.addColumn("Fecha");
+            modeloTabla.addColumn("Vendedor");
+            modeloTabla.addColumn("Total");
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+
+                }
+                modeloTabla.addRow(filas);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
     }
     
     public void trasparenciaButton(){
-        btn1.setOpaque(false);
-        btn1.setContentAreaFilled(false);
-        btn1.setBorderPainted(false);
+        btnImprimir.setOpaque(false);
+        btnImprimir.setContentAreaFilled(false);
+        btnImprimir.setBorderPainted(false);
     }
 
     /**
@@ -38,8 +77,8 @@ public class informeDeVenta extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        btn1 = new javax.swing.JButton();
+        jtVentas = new javax.swing.JTable();
+        btnImprimir = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -55,7 +94,6 @@ public class informeDeVenta extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
         jTextField1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jTextField1.setForeground(new java.awt.Color(51, 51, 51));
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -68,7 +106,6 @@ public class informeDeVenta extends javax.swing.JFrame {
         });
         jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 80, 130, 30));
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
         jTextField2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         jTextField2.setForeground(new java.awt.Color(51, 51, 51));
         jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -76,27 +113,41 @@ public class informeDeVenta extends javax.swing.JFrame {
         jTextField2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
         jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, 130, 30));
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTable1.setForeground(new java.awt.Color(51, 51, 51));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtVentas.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jtVentas.setForeground(new java.awt.Color(51, 51, 51));
+        jtVentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Fecha", "Vendedor", "Total"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jtVentas);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, -1, 360));
 
-        btn1.setBackground(new java.awt.Color(255, 255, 255));
-        btn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Group10.png"))); // NOI18N
-        jPanel1.add(btn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 70, 120, 50));
+        btnImprimir.setBackground(new java.awt.Color(255, 255, 255));
+        btnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Group10.png"))); // NOI18N
+        jPanel1.add(btnImprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 70, 120, 50));
 
         jLabel7.setFont(new java.awt.Font("Futura Bk BT", 1, 16)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(51, 51, 51));
@@ -171,7 +222,7 @@ public class informeDeVenta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn1;
+    private javax.swing.JButton btnImprimir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -182,8 +233,8 @@ public class informeDeVenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    public javax.swing.JTable jtVentas;
     // End of variables declaration//GEN-END:variables
 }

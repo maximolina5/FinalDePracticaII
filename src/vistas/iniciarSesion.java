@@ -1,23 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vistas;
 
 import javax.swing.JOptionPane;
 import modelo.UsuarioDao;
 import modelo.Usuario;
 
-/**
- *
- * @author maxim
- */
 public class iniciarSesion extends javax.swing.JFrame {
 
-    /**
-     * Creates new form iniciarSesion
-     */
+    
     public iniciarSesion() {
         initComponents();
         trasparenciaButton();

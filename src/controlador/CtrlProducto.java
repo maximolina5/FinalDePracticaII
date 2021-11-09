@@ -13,12 +13,14 @@ import modelo.Conexion;
 import modelo.ProductoDao;
 import modelo.Producto;
 import vistas.altaProductos;
+import vistas.altaPrecio;
 
 public class CtrlProducto implements ActionListener {
 
     private Producto mod;
     private ProductoDao modC;
     private altaProductos frm;
+    private altaPrecio frm2;
 
     public CtrlProducto(Producto mod, ProductoDao modC, altaProductos frm) {
         this.mod = mod;
@@ -92,6 +94,7 @@ public class CtrlProducto implements ActionListener {
             limpiar();
 
         }
+
     }
 
     public void limpiar() {
@@ -137,5 +140,7 @@ public class CtrlProducto implements ActionListener {
             System.err.println(ex.toString());
         }
     }
+    
+
 
 }

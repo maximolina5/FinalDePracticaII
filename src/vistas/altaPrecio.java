@@ -5,6 +5,14 @@
  */
 package vistas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import modelo.Conexion;
+
 /**
  *
  * @author maxim
@@ -14,30 +22,66 @@ public class altaPrecio extends javax.swing.JFrame {
     /**
      * Creates new form altaPrecio
      */
+    String where = "";
+
     public altaPrecio() {
         initComponents();
         trasparenciaButton();
+        try {
+            DefaultTableModel modeloTabla = new DefaultTableModel();
+            jtProductos.setModel(modeloTabla);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+
+            String sql = "SELECT codigo, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modeloTabla.addColumn("Codigo");
+            modeloTabla.addColumn("Cantidad");
+            modeloTabla.addColumn("Descripcion");
+            modeloTabla.addColumn("Vencimiento");
+            modeloTabla.addColumn("Precio");
+            modeloTabla.addColumn("Ingreso");
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+
+                }
+                modeloTabla.addRow(filas);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
     }
-    
-    public void trasparenciaButton(){
+
+    public void trasparenciaButton() {
         btn1.setOpaque(false);
         btn1.setContentAreaFilled(false);
         btn1.setBorderPainted(false);
-        btn2.setOpaque(false);
-        btn2.setContentAreaFilled(false);
-        btn2.setBorderPainted(false);
-        btn3.setOpaque(false);
-        btn3.setContentAreaFilled(false);
-        btn3.setBorderPainted(false);
-        btn4.setOpaque(false);
-        btn4.setContentAreaFilled(false);
-        btn4.setBorderPainted(false);
-        btn5.setOpaque(false);
-        btn5.setContentAreaFilled(false);
-        btn5.setBorderPainted(false);
-        btn6.setOpaque(false);
-        btn6.setContentAreaFilled(false);
-        btn6.setBorderPainted(false);
+        btnModificar.setOpaque(false);
+        btnModificar.setContentAreaFilled(false);
+        btnModificar.setBorderPainted(false);
+        btnEliminar.setOpaque(false);
+        btnEliminar.setContentAreaFilled(false);
+        btnEliminar.setBorderPainted(false);
+        btnGuardar.setOpaque(false);
+        btnGuardar.setContentAreaFilled(false);
+        btnGuardar.setBorderPainted(false);
+        btnBorrar.setOpaque(false);
+        btnBorrar.setContentAreaFilled(false);
+        btnBorrar.setBorderPainted(false);
+        btnBuscar.setOpaque(false);
+        btnBuscar.setContentAreaFilled(false);
+        btnBuscar.setBorderPainted(false);
     }
 
     /**
@@ -50,21 +94,21 @@ public class altaPrecio extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        btn5 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtProductos = new javax.swing.JTable();
+        btnBorrar = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
-        btn2 = new javax.swing.JButton();
-        btn3 = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         btn1 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        btn4 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        btn6 = new javax.swing.JButton();
+        txtCodigo = new javax.swing.JTextField();
+        txtPrecio = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -80,27 +124,54 @@ public class altaPrecio extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setBackground(new java.awt.Color(255, 255, 255));
-        jTable1.setForeground(new java.awt.Color(51, 51, 51));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtProductos.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jtProductos.setForeground(new java.awt.Color(51, 51, 51));
+        jtProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "Cantidad", "Descripcion", "Vencimiento", "Precio", "Ingreso"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 490, 210));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        btn5.setBackground(new java.awt.Color(255, 255, 255));
-        btn5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
-        btn5.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, 70, 50));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtProductosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtProductos);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 160, 480, 190));
+
+        btnBorrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        btnBorrar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, 70, 50));
 
         jLabel15.setBackground(new java.awt.Color(51, 51, 51));
         jLabel15.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
@@ -108,15 +179,25 @@ public class altaPrecio extends javax.swing.JFrame {
         jLabel15.setText(" Crear");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 420, 40, -1));
 
-        btn2.setBackground(new java.awt.Color(255, 255, 255));
-        btn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/modificar1.png"))); // NOI18N
-        btn2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
+        btnModificar.setBackground(new java.awt.Color(255, 255, 255));
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/modificar1.png"))); // NOI18N
+        btnModificar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 80, 50));
 
-        btn3.setBackground(new java.awt.Color(255, 255, 255));
-        btn3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
-        btn3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 370, 80, 50));
+        btnEliminar.setBackground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/eliminar.png"))); // NOI18N
+        btnEliminar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 370, 80, 50));
 
         jLabel16.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(51, 51, 51));
@@ -139,34 +220,42 @@ public class altaPrecio extends javax.swing.JFrame {
         jLabel18.setText(" Borrar");
         jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 470, 50, -1));
 
-        btn4.setBackground(new java.awt.Color(255, 255, 255));
-        btn4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/guardar.png"))); // NOI18N
-        btn4.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        jPanel1.add(btn4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 60, 50));
+        btnGuardar.setBackground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/guardar.png"))); // NOI18N
+        btnGuardar.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 420, 60, 50));
 
         jLabel19.setFont(new java.awt.Font("Futura Bk BT", 0, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(51, 51, 51));
         jLabel19.setText("Guardar");
         jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 470, -1, -1));
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField1.setText("Buscar");
-        jTextField1.setToolTipText("Buscar");
-        jTextField1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
-        jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, 150, 30));
+        txtCodigo.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        txtCodigo.setForeground(new java.awt.Color(51, 51, 51));
+        txtCodigo.setText("Buscar");
+        txtCodigo.setToolTipText("Buscar");
+        txtCodigo.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        txtCodigo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel1.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, 150, 30));
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(51, 51, 51));
-        jTextField2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 140, 30));
+        txtPrecio.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        txtPrecio.setForeground(new java.awt.Color(51, 51, 51));
+        txtPrecio.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        jPanel1.add(txtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 140, 30));
 
-        btn6.setBackground(new java.awt.Color(255, 255, 255));
-        btn6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search_1.png"))); // NOI18N
-        jPanel1.add(btn6, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 90, 40, 30));
+        btnBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Search_1.png"))); // NOI18N
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 90, 40, 30));
 
         jLabel8.setFont(new java.awt.Font("Futura Bk BT", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(51, 51, 51));
@@ -216,6 +305,89 @@ public class altaPrecio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String nom = txtCodigo.getText();
+        this.where = "";
+
+        if (!nom.equals("")) {
+            where = "WHERE codigo= '" + nom + "'";
+        }
+        try {
+            DefaultTableModel modeloTabla = new DefaultTableModel();
+            jtProductos.setModel(modeloTabla);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+
+            String sql = "SELECT codigo, cantidad, descripcion, fecha_vencimiento, precio, fecha_ingreso FROM producto " + where;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cantidadColumnas = rsmd.getColumnCount();
+
+            modeloTabla.addColumn("Codigo");
+            modeloTabla.addColumn("Cantidad");
+            modeloTabla.addColumn("Descripcion");
+            modeloTabla.addColumn("Vencimiento");
+            modeloTabla.addColumn("Precio");
+            modeloTabla.addColumn("Ingreso");
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+
+                }
+                modeloTabla.addRow(filas);
+
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void jtProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtProductosMouseClicked
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConexion();
+
+            int fila = jtProductos.getSelectedRow();
+            String nom = jtProductos.getValueAt(fila, 0).toString();
+
+            ps = conn.prepareStatement("SELECT codigo,precio FROM producto WHERE codigo=?");
+            ps.setString(1, nom);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                txtCodigo.setText(rs.getString("codigo"));
+                txtPrecio.setText(rs.getString("precio"));
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtProductosMouseClicked
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -252,12 +424,12 @@ public class altaPrecio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn1;
-    private javax.swing.JButton btn2;
-    private javax.swing.JButton btn3;
-    private javax.swing.JButton btn4;
-    private javax.swing.JButton btn5;
-    private javax.swing.JButton btn6;
+    public javax.swing.JButton btn1;
+    public javax.swing.JButton btnBorrar;
+    public javax.swing.JButton btnBuscar;
+    public javax.swing.JButton btnEliminar;
+    public javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -273,9 +445,9 @@ public class altaPrecio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JTable jtProductos;
+    public javax.swing.JTextField txtCodigo;
+    public javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
 }

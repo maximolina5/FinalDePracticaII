@@ -66,11 +66,11 @@ public class CtrlUsuario implements ActionListener{
         }
         
         if(e.getSource() == alt.btnModificar){
-      //      mod.setId(Integer.parseInt(alt.txtId.getText()));
+            mod.setId(Integer.parseInt(alt.txtId.getText()));
             mod.setNombre(alt.txtNombre.getText());
             mod.setApellido(alt.txtApellido.getText());
             mod.setDni(Integer.parseInt(alt.txtDni.getText()));
-            mod.setTipo_usuario(alt.txtTipoUsuario.toString());
+            mod.setTipo_usuario(alt.txtTipoUsuario.getSelectedItem().toString());
             mod.setNombre_usuario(alt.txtNombreUsuario.getText());
             mod.setContrasenia(alt.txtContrasenia.getText());
             
@@ -86,7 +86,7 @@ public class CtrlUsuario implements ActionListener{
         
         if(e.getSource() == alt.btnEliminar){
             
-//            mod.setId(Integer.parseInt(alt.txtId.getText()));          
+            mod.setId(Integer.parseInt(alt.txtId.getText()));          
             if(modC.eliminar(mod)){                
                 JOptionPane.showInternalMessageDialog(null, "Registro eliminado");
                 limpiar();
@@ -108,29 +108,30 @@ public class CtrlUsuario implements ActionListener{
     
     public void limpiar(){
         
-       // alt.txtId.setText(null);
+        alt.txtId.setText(null);
         alt.txtNombre.setText(null);
         alt.txtApellido.setText(null);
         alt.txtDni.setText(null);
-      //  alt.txtTipoUsuario.setText(null);
+        alt.txtTipoUsuario.setSelectedItem(null);
         alt.txtNombreUsuario.setText(null);
         alt.txtContrasenia.setText(null);
         
         try {
             DefaultTableModel modeloTabla = new DefaultTableModel();
-          //  alt.jtUsuarios.setModel(modeloTabla);
+            alt.jtUsuario.setModel(modeloTabla);
             PreparedStatement ps = null;
             ResultSet rs = null;
             Conexion conn = new Conexion();
             Connection con = conn.getConexion();
 
-            String sql = "SELECT nombre, apellido, dni, tipo_usuario, nombre_usuario, contrasenia FROM usuario";
+            String sql = "SELECT id_usuario, nombre, apellido, dni, tipo_usuario, nombre_usuario, contrasenia FROM usuario";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int cantidadColumnas = rsmd.getColumnCount();
 
+            modeloTabla.addColumn("id_usuario");
             modeloTabla.addColumn("nombre");
             modeloTabla.addColumn("apellido");
             modeloTabla.addColumn("dni");
